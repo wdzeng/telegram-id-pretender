@@ -59,26 +59,26 @@ async def task(client):
     try:
         result = await client(CheckUsernameRequest(desired_username))
         if result:
-            await info('Username is not occupied, try to take it.')
+            await info('Username is not occupied, try to take it.', client)
             await client(UpdateUsernameRequest(desired_username))
-            await info('Successfully take the username: ' + desired_username)
+            await info('Successfully take the username: ' + desired_username, client)
             return 0
         else:
             # username is occupied
-            await info('Username occupied: ' + desired_username)
+            await info('Username occupied: ' + desired_username, client)
             return 20
     except UsernameOccupiedError:
-        await info('Username occupied: ' + desired_username)
+        await info('Username occupied: ' + desired_username, client)
         return 20
     except UsernameInvalidError:
-        await info('Username invalid: ' + desired_username)
+        await info('Username invalid: ' + desired_username, client)
         return 21
     except UsernameNotModifiedError:
-        await info('Username not modified: ' + desired_username)
+        await info('Username not modified: ' + desired_username, client)
         return 22
     except FloodWaitError as e:
         # https://docs.telethon.dev/en/stable/quick-references/faq.html#how-can-i-except-floodwaiterror
-        await info('Flood. Remaning: ' + str(e.seconds))
+        await info('Flood. Remaning: ' + str(e.seconds), client)
         return 87
 
 
