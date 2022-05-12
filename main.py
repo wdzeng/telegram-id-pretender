@@ -3,7 +3,7 @@ import asyncio
 import sys
 from telethon import TelegramClient
 from telethon.sessions import StringSession
-from telethon.tl.functions.account import UpdateUsernameRequest
+from telethon.tl.functions.account import UpdateUsernameRequest, CheckUsernameRequest
 from telethon.errors import FloodWaitError, UsernameOccupiedError, UsernameInvalidError, UsernameNotModifiedError
 
 api_id = os.environ['TG_API_ID']
@@ -51,10 +51,17 @@ def login():
 async def task(client):
     # https://docs.telethon.dev/en/stable/examples/users.html?highlight=updateusername#updating-your-username
     try:
-        await client(UpdateUsernameRequest(desired_username))
-        print('Username updated: ' + desired_username)
-        msg = '[Peeker] Successfully take the username: ' + desired_username
-        exit_code = 0
+        result = await client(CheckUsernameRequest(desired_username))
+        if result:
+            await client(UpdateUsernameRequest(desired_username))
+            print('Username updated: ' + desired_username)
+            msg = '[Peeker] Successfully take the username: ' + desired_username
+            exit_code = 0
+        else:
+            # username is occupied
+            print('Username occupied: ' + desired_username)
+            msg = '[Peeker] Username occupied: ' + desired_username
+            exit_code = 20
     except UsernameOccupiedError:
         print('Username occupied: ' + desired_username)
         msg = '[Peeker] Username occupied: ' + desired_username
