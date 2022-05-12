@@ -48,41 +48,38 @@ def login():
     return client
 
 
+async def info(s, client):
+    print(s)
+    if client is not None and send_message is not None:
+        await client.send_message('me', '[Peeker] ' + s)
+
+
 async def task(client):
     # https://docs.telethon.dev/en/stable/examples/users.html?highlight=updateusername#updating-your-username
     try:
         result = await client(CheckUsernameRequest(desired_username))
         if result:
+            await info('Username is not occupied, try to take it.')
             await client(UpdateUsernameRequest(desired_username))
-            print('Username updated: ' + desired_username)
-            msg = '[Peeker] Successfully take the username: ' + desired_username
-            exit_code = 0
+            await info('Successfully take the username: ' + desired_username)
+            return 0
         else:
             # username is occupied
-            print('Username occupied: ' + desired_username)
-            msg = '[Peeker] Username occupied: ' + desired_username
-            exit_code = 20
+            await info('Username occupied: ' + desired_username)
+            return 20
     except UsernameOccupiedError:
-        print('Username occupied: ' + desired_username)
-        msg = '[Peeker] Username occupied: ' + desired_username
-        exit_code = 20
+        await info('Username occupied: ' + desired_username)
+        return 20
     except UsernameInvalidError:
-        print('Username invalid: ' + desired_username)
-        msg = '[Peeker] Invalid username: ' + desired_username
-        exit_code = 21
+        await info('Username invalid: ' + desired_username)
+        return 21
     except UsernameNotModifiedError:
-        print('Username not modified: ' + desired_username)
-        msg = '[Peeker] You already take the username: ' + desired_username
-        exit_code = 22
+        await info('Username not modified: ' + desired_username)
+        return 22
     except FloodWaitError as e:
         # https://docs.telethon.dev/en/stable/quick-references/faq.html#how-can-i-except-floodwaiterror
-        print('Flood. Remaning: ' + str(e.seconds))
-        msg = '[Peeker] Flood. Remaining: ' + str(e.seconds)
-        exit_code = 87
-
-    if send_message is not None:
-        await client.send_message('me', msg)
-    return exit_code
+        await info('Flood. Remaning: ' + str(e.seconds))
+        return 87
 
 
 def saveLogin(client):
