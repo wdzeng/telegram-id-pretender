@@ -20,6 +20,16 @@ Following command tries to update username to `fzhong`.
 TG_API_ID=<api_id> TG_API_HASH=<api_hash> DESIRED_USERNAME=fzhong python3 main.py
 ```
 
+Or run the script using docker.
+
+```bash
+docker -e TG_API_ID=<api_id> \
+       -e TG_API_HASH=<api_hash> \
+       -e DESIRED_USERNAME=fzhong \
+       [-it] \
+       hyperbola/telegram-peeker:v1
+```
+
 ### Login Automatically
 
 The script asks your login interactively. To login automatically, you can provided a file to save and restore the session:
@@ -36,7 +46,7 @@ Since telegram requires 2FA login and must be performed on the spot, there is no
 
 ### Options
 
-Four environment variables make effects:
+Following environment variables make effects:
 
 - `TG_API_ID`: Required. The telegram API ID.
 - `TG_API_HASH`: Required. The telegram API hash.
