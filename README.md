@@ -1,5 +1,7 @@
 # Telegram Peeker
 
+![peek](res/peek.png)
+
 Peek at other's Telegram username, taking it over once it is released.
 
 ## Install
