@@ -48,7 +48,7 @@ def login():
     return client
 
 
-async def info(s, client):
+async def info(s, client = None):
     print(s)
     if client is not None and send_message is not None:
         await client.send_message('me', '[Peeker] ' + s)
