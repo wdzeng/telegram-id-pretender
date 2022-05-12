@@ -10,6 +10,7 @@ api_id = os.environ['TG_API_ID']
 api_hash = os.environ['TG_API_HASH']
 session_path = os.environ.get('TG_SESSION_PATH')
 desired_username = os.environ['DESIRED_USERNAME']
+send_message = 'SEND_TG_MESSAGE' in os.environ
 
 # API ID should be number
 try:
@@ -17,6 +18,7 @@ try:
 except ValueError:
     print('Invalid api id: ' + api_id)
     sys.exit(30)
+
 
 def login():
     # Login if needed
@@ -32,7 +34,7 @@ def login():
     else:
         print('No session file provided. Try login.')
 
-    if session_text == '' and not os.isatty(sys.stdout.fileno()):
+    if session_text == '' and not os.isatty(sys.stdin.fileno()):
         # if no session is provided and this is not an interactive shell
         # let the login failed without asking user.
         print('Not interactive shell. Do not prompt login. Login failed.')
@@ -51,20 +53,29 @@ async def task(client):
     try:
         await client(UpdateUsernameRequest(desired_username))
         print('Username updated: ' + desired_username)
-        return 0
+        msg = '[Peeker] Successfully take the username: ' + desired_username
+        exit_code = 0
     except UsernameOccupiedError:
         print('Username occupied: ' + desired_username)
-        return 20
+        msg = '[Peeker] Username occupied: ' + desired_username
+        exit_code = 20
     except UsernameInvalidError:
         print('Username invalid: ' + desired_username)
-        return 21
+        msg = '[Peeker] Invalid username: ' + desired_username
+        exit_code = 21
     except UsernameNotModifiedError:
         print('Username not modified: ' + desired_username)
-        return 22
+        msg = '[Peeker] You already take the username: ' + desired_username
+        exit_code = 22
     except FloodWaitError as e:
         # https://docs.telethon.dev/en/stable/quick-references/faq.html#how-can-i-except-floodwaiterror
         print('Flood. Remaning: ' + str(e.seconds))
-        return 87
+        msg = '[Peeker] Flood. Remaining: ' + str(e.seconds)
+        exit_code = 87
+
+    if send_message is not None:
+        await client.send_message('me', msg)
+    return exit_code
 
 
 def saveLogin(client):

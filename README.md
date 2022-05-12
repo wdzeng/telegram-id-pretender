@@ -33,14 +33,16 @@ If such file is specified, the script tries to read session token from the file 
 If the script is not running non-interactively, the session file should be specified. Otherwise the script exits without asking your login.
 
 Since telegram requires 2FA login and must be performed on the spot, there is no support for logging automatically given username and password.
+
 ### Options
 
 Four environment variables make effects:
 
-- `TG_API_ID`: Required. The API ID. This should be a number.
-- `TG_API_HASH`: Required. The API hash.
-- `TG_SESSION_PATH`: Optional. The path where session token is saved.
-- `DESIRED_USERNAME`: Required. The username you want to take.
+- `TG_API_ID`: Required. The telegram API ID.
+- `TG_API_HASH`: Required. The telegram API hash.
+- `TG_SESSION_PATH`: Optional. The path where telegram session token is saved.
+- `DESIRED_USERNAME`: Required. The telegram username you want to take.
+- `SEND_TG_MESSAGE`: Optional. If set, the script sends a message to your "Saved Messages" to inform the result.
 
 If you do not own the API key, generate one [here](https://my.telegram.org/apps).
 
