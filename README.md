@@ -29,7 +29,7 @@ docker -e TG_API_ID=<api_id> \
        -e TG_API_HASH=<api_hash> \
        -e DESIRED_USERNAME=fzhong \
        [-it] \
-       hyperbola/telegram-peeker:v1
+       hyperbola/telegram-peeker:latest
 ```
 
 The script should ask your login.
