@@ -6,7 +6,7 @@ Peek at other's Telegram username, taking it over once it is released.
 
 ## Install
 
-The [telethon](https://docs.telethon.dev/en/stable/) library is used. Python 3 is required.
+The [telethon](https://docs.telethon.dev/en/stable/) library is used. Python 3.7 is required.
 
 ```python
 pip3 install telethon
@@ -16,33 +16,32 @@ pip3 install telethon
 
 The script should be used with cron. A running is an attempt to change the username.
 
+### CLI
+
 Following command tries to update username to `fzhong`.
 
 ```py
-TG_API_ID=<api_id> TG_API_HASH=<api_hash> DESIRED_USERNAME=fzhong python3 main.py
+TG_API_ID=<api_id> TG_API_HASH=<api_hash> python3 main.py fzhong
 ```
 
-Or run the script using docker.
+If you do not own an API key, generate one [here](https://my.telegram.org/apps).
+
+### Docker
 
 ```bash
-docker -e TG_API_ID=<api_id> \
-       -e TG_API_HASH=<api_hash> \
-       -e DESIRED_USERNAME=fzhong \
-       [-it] \
-       hyperbola/telegram-peeker:latest
+docker run -e TG_API_ID=api_id -e TG_API_HASH=api_hash [-it] hyperbola/telegram-peeker fzhong
 ```
 
 The script should ask your login.
 
-> You should answer your mobile phone number in international format. If you are Taiwanese, you should use `+8869xxxxxxxxx` instead of `09xxxxxxxx`.
+> You should answer your mobile phone number in international format. For Taiwanese, use `+8869xxxxxxxxx` instead of `09xxxxxxxx`.
 
 ### Login Automatically
 
-The script asks your login interactively. To login automatically, you can provided a file to save and restore the session by specifying `TG_SESSION_PATH` environment variable.
+The script asks your login interactively. To login automatically, you can `-s <file-to-save-session>` to save and restore the login session.
 
 ```py
-TG_API_ID=<api_id> TG_API_HASH=<api_hash> DESIRED_USERNAME=fzhong \
-    TG_SESSION_PATH=~/session python3 main.py
+TG_API_ID=api_id TG_API_HASH=api_hash python3 main.py -s ~/session fzhong
 ```
 
 If such file is specified, the script tries to read session token from the file and uses that token to login. If such file does not exist, or if the session token is invalid, the script prompts your login and then save the updated token to that file so that it can login automatically in the next run. Keep that file secret since it contains sensitive data.
@@ -53,26 +52,32 @@ Since telegram requires 2FA login and this action must be performed on the spot,
 
 ### Options
 
-Following environment variables make effects:
+- `--id` PATH: read telegram api id from this file
+- `--hash` PATH: read telegram api hash from this file
+- `-s`, `--session` PATH: read login token from this file
+- `-v`: verbose; should be `0`, `1` or `2`; default to `1`
+- `--no-prompt`: do not ask login even in interactive shell
 
-- `TG_API_ID`: Required. The telegram API ID.
-- `TG_API_HASH`: Required. The telegram API hash.
-- `TG_SESSION_PATH`: Optional. The path where telegram session token is saved.
-- `DESIRED_USERNAME`: Required. The telegram username you want to take.
-- `SEND_TG_MESSAGE`: Optional. If set, the script sends a message to your "Saved Messages" to inform the result. Noted that if the script failed to login, you receive no message.
+Following environment variables make effects. Noted that these variables refer to value directly, but not path to the value.
 
-If you do not own an API key, generate one [here](https://my.telegram.org/apps).
+- `TG_API_ID`: telegram api id; overrides `--id` option
+- `TG_API_HASH`: telegram api hash; overrides `--hash` option
+- `TG_SESSION_PATH`: login session; overrides `--session` option
+
+### Verbosity
+
+Verbosity can be set to either 0, 1, or 2 by `-v` flag. Control which message should be sent to your `Saved Messages` channel in your telegram account.
+
+- `0`: do not send any message to telegram
+- `1`: send critical messages only
+- `2`: send all messages
 
 ### Exit Code
 
-- `0`: Successfully take the desired username.
-- `20`: Desired username is occupied.
-- `21`: Desired username is invalid.
-- `22`: Desired username already owned by you.
-- `30`: Failed to login.
-- `40`: Failed for flood.
-- `1`: Failed for any other reason.
-
-## Caution
-
-To avoid flood, run this script every 15 minutes would be good.
+- `0`: successfully take the desired username
+- `20`: desired username is occupied
+- `21`: desired username is invalid
+- `22`: desired username already owned by you
+- `30`: failed to login
+- `87`: failed for flood
+- `1`: failed for any other reason
