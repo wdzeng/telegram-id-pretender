@@ -9,7 +9,7 @@ Peek at other's Telegram username, taking it over once it is released.
 The [telethon](https://docs.telethon.dev/en/stable/) library is used. Python 3.7 is required.
 
 ```python
-pip3 install telethon
+pip3 install telethon argparse
 ```
 
 ## Usage
