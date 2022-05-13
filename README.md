@@ -8,28 +8,30 @@ Peek at other's Telegram username, taking it over once it is released.
 
 The [telethon](https://docs.telethon.dev/en/stable/) library is used. Python 3.7 is required.
 
-```python
-pip3 install telethon argparse
+```bash
+pip3 install telethon
+```
+
+Or use the image on [dockerhub](https://hub.docker.com/repository/docker/hyperbola/telegram-peeker).
+
+```bash
+docker pull hyperbola/telegram-peeker:1.0
 ```
 
 ## Usage
 
-The script should be used with cron. A running is an attempt to change the username.
+The script should be used with cron. A running is an attempt to take over the username.
 
-### CLI
+You need an API key to use the script. You can generate one [here](https://my.telegram.org/apps).
 
 Following command tries to update username to `fzhong`.
 
-```py
-TG_API_ID=<api_id> TG_API_HASH=<api_hash> python3 main.py fzhong
-```
-
-If you do not own an API key, generate one [here](https://my.telegram.org/apps).
-
-### Docker
-
 ```bash
-docker run -e TG_API_ID=api_id -e TG_API_HASH=api_hash [-it] hyperbola/telegram-peeker fzhong
+# cli
+TG_API_ID=<api_id> TG_API_HASH=<api_hash> python3 main.py fzhong
+
+# docker
+docker run -e TG_API_ID=<api_id> -e TG_API_HASH=<api_hash> [-it] hyperbola/telegram-peeker:1.0 fzhong
 ```
 
 The script should ask your login.
@@ -40,7 +42,7 @@ The script should ask your login.
 
 The script asks your login interactively. To login automatically, you can `-s <file-to-save-session>` to save and restore the login session.
 
-```py
+```bash
 TG_API_ID=api_id TG_API_HASH=api_hash python3 main.py -s ~/session fzhong
 ```
 
@@ -55,14 +57,14 @@ Since telegram requires 2FA login and this action must be performed on the spot,
 - `--id` PATH: read telegram api id from this file
 - `--hash` PATH: read telegram api hash from this file
 - `-s`, `--session` PATH: read login token from this file
-- `-v`: verbose; should be `0`, `1` or `2`; default to `1`
-- `--no-prompt`: do not ask login even in interactive shell
+- `-v`, '--verbose': verbose; should be `0`, `1` or `2`; default to `1`
+- `-D`, `--no-prompt`: do not ask login even in interactive shell
 
 Following environment variables make effects. Noted that these variables refer to value directly, but not path to the value.
 
 - `TG_API_ID`: telegram api id; overrides `--id` option
 - `TG_API_HASH`: telegram api hash; overrides `--hash` option
-- `TG_SESSION_PATH`: login session; overrides `--session` option
+- `TG_SESSION`: login session; overrides `--session` option
 
 ### Verbosity
 
