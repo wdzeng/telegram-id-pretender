@@ -45,7 +45,7 @@ no_prompt = args.no_prompt
 
 async def info(s, level, client=None):
     print(s)
-    if client is not None and level >= verbose:
+    if client is not None and verbose >= level:
         await client.send_message('me', '[Peeker] ' + s)
 
 
@@ -136,36 +136,36 @@ async def take_username(client, desired_username):
         # Check if the username is already owned by the client
         me = await client.get_me()
         if me.username == desired_username:
-            await info('Username not modified: ' + desired_username, 2, client)
+            await info('Username not modified: ' + desired_username, 1, client)
             return 22
 
         # Check if the username is available
         username_available = await client(CheckUsernameRequest(desired_username))
 
         if not username_available:
-            await info('Username occupied: ' + desired_username, 1, client)
+            await info('Username occupied: ' + desired_username, 2, client)
             return 20
 
-        await info('Username is not occupied, try to take it.', 2, client)
+        await info('Username is not occupied, try to take it.', 1, client)
         await client(UpdateUsernameRequest(desired_username))
-        await info('Successfully take the username: ' + desired_username, 2, client)
+        await info('Successfully take the username: ' + desired_username, 1, client)
         return 0
 
     except UsernameOccupiedError:
-        await info('Username occupied: ' + desired_username, 1, client)
+        await info('Username occupied: ' + desired_username, 2, client)
         return 20
 
     except UsernameInvalidError:
-        await info('Username invalid: ' + desired_username, 2, client)
+        await info('Username invalid: ' + desired_username, 1, client)
         return 21
 
     except UsernameNotModifiedError:
-        await info('Username not modified: ' + desired_username, 2, client)
+        await info('Username not modified: ' + desired_username, 1, client)
         return 22
 
     except FloodWaitError as e:
         # https://docs.telethon.dev/en/stable/quick-references/faq.html#how-can-i-except-floodwaiterror
-        await info('Flood. Remaning: ' + str(e.seconds), 1, client)
+        await info('Flood. Remaning: ' + str(e.seconds), 2, client)
         return 87
 
 
