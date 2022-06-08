@@ -1,63 +1,87 @@
 # Telegram Peeker
 
+[![release](https://badgen.net/github/release/wdzeng/telegram-peeker/stable?color=red)](https://github.com/wdzeng/telegram-peeker/releases/latest)
+[![github](https://badgen.net/badge/icon/github/black?icon=github&label=)](https://github.com/wdzeng/telegram-peeker)
+[![docker](https://badgen.net/badge/icon/docker?icon=docker&label=)](https://hub.docker.com/repository/docker/hyperbola/telegram-peeker)
+
 ![peek](res/peek.png)
 
 Peek at other's Telegram username, taking it over once it is released.
 
 ## Install
 
-The [telethon](https://docs.telethon.dev/en/stable/) library is used. Python 3.7 is required.
+### Python
+
+Python 3.7 or up is required.
+
+The [telethon](https://docs.telethon.dev/en/stable/) library is used.
 
 ```bash
 pip3 install telethon
 ```
 
-Or use the image on [dockerhub](https://hub.docker.com/repository/docker/hyperbola/telegram-peeker).
+### Docker
+
+Use the image on [dockerhub](https://hub.docker.com/repository/docker/hyperbola/telegram-peeker).
 
 ```bash
-docker pull hyperbola/telegram-peeker:1.0
+docker pull hyperbola/telegram-peeker:v1
 ```
+
+#### Supported tags
+
+- `v1`, `v1.0`
 
 ## Usage
 
-The script should be used with cron. A running is an attempt to take over the username.
+A running is an attempt to take over the username; therefore the script should be used with cron.
 
-You need an API key to use the script. You can generate one [here](https://my.telegram.org/apps).
-
-Following command tries to update username to `fzhong`.
+Following command tries to update username to `fzhong`. You need an API key to use the script. You can generate one [here](https://my.telegram.org/apps).
 
 ```bash
-# cli
+# python
 TG_API_ID=<api_id> TG_API_HASH=<api_hash> python3 main.py fzhong
 
 # docker
-docker run -e TG_API_ID=<api_id> -e TG_API_HASH=<api_hash> [-it] hyperbola/telegram-peeker:1.0 fzhong
+docker run [-it]\
+    -e TG_API_ID=<api_id> \
+    -e TG_API_HASH=<api_hash> 
+    hyperbola/telegram-peeker:v1 fzhong
 ```
 
 The script should ask your login.
 
+> **Warning**
 > You should answer your mobile phone number in international format. For Taiwanese, use `+8869xxxxxxxxx` instead of `09xxxxxxxx`.
 
-### Login Automatically
+## Automatic Login
 
-The script asks your login interactively. To login automatically, you can `-s <file-to-save-session>` to save and restore the login session.
+The script asks your login interactively. To do automatic login, you can `-s <session-file>` to save and restore the login session.
 
 ```bash
-TG_API_ID=api_id TG_API_HASH=api_hash python3 main.py -s ~/session fzhong
+# python
+TG_API_ID=<api_id> TG_API_HASH=<api_hash> python3 main.py -s /path/to/session/file fzhong
+
+# docker
+docker run [-it] \
+    -v /path/to/session:/session \
+    -e TG_API_ID=<api_id> \
+    -e TG_API_HASH=<api_hash> \
+    hyperbola/telegram-peeker:v1 -s /session fzhong
 ```
 
-If such file is specified, the script tries to read session token from the file and uses that token to login. If such file does not exist, or if the session token is invalid, the script prompts your login and then save the updated token to that file so that it can login automatically in the next run. Keep that file secret since it contains sensitive data.
+If session file is specified, the script tries to read session token from the file and uses it to login; otherwise if session file does not exist, or if session token is invalid, the script prompts your login and then saves the updated token to session file so that it can perform automatic login in the next run. Keep session file secret since it contains sensitive data.
 
-If the script is not running interactively, the session file should be specified. Otherwise the script exits without asking your login.
+If the script is not running interactively, the session file must be specified. Otherwise the script fails without asking your login.
 
-Since telegram requires 2FA login and this action must be performed on the spot, there is no support for logging automatically by setting username and password.
+Since telegram requires 2FA login and this action must be performed on the spot, there is no support automatic login by setting username and password.
 
-### Options
+## Options
 
 - `--id` PATH: read telegram api id from this file
 - `--hash` PATH: read telegram api hash from this file
 - `-s`, `--session` PATH: read login token from this file
-- `-v`, '--verbose': verbose; should be `0`, `1` or `2`; default to `1`
+- `-v`, `--verbose`: verbosity level; should be `0`, `1` or `2`; default to `1`
 - `-D`, `--no-prompt`: do not ask login even in interactive shell
 
 Following environment variables make effects. Noted that these variables refer to value directly, but not path to the value.
@@ -66,20 +90,20 @@ Following environment variables make effects. Noted that these variables refer t
 - `TG_API_HASH`: telegram api hash; overrides `--hash` option
 - `TG_SESSION`: login session; overrides `--session` option
 
-### Verbosity
+## Verbosity
 
 Verbosity can be set to either 0, 1, or 2 by `-v` flag. Control which message should be sent to your `Saved Messages` channel in your telegram account.
 
-- `0`: do not send any message to telegram
+- `0`: do not send any message
 - `1`: send critical messages only
 - `2`: send all messages
 
-### Exit Code
+## Exit Code
 
-- `0`: successfully take the desired username
+- `0`: successfully took the desired username
 - `20`: desired username is occupied
 - `21`: desired username is invalid
-- `22`: desired username already owned by you
+- `22`: desired username is already owned by you
 - `30`: failed to login
 - `87`: failed for flood
 - `1`: failed for any other reason
