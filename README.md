@@ -1,4 +1,4 @@
-# Telegram Peeker
+# Telegram ID Pretender
 
 [![release](https://badgen.net/github/release/wdzeng/telegram-peeker/stable?color=red)](https://github.com/wdzeng/telegram-peeker/releases/latest)
 [![github](https://badgen.net/badge/icon/github/black?icon=github&label=)](https://github.com/wdzeng/telegram-peeker)
