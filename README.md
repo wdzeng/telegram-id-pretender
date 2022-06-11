@@ -1,8 +1,8 @@
 # Telegram ID Pretender
 
-[![release](https://badgen.net/github/release/wdzeng/telegram-peeker/stable?color=red)](https://github.com/wdzeng/telegram-peeker/releases/latest)
-[![github](https://badgen.net/badge/icon/github/black?icon=github&label=)](https://github.com/wdzeng/telegram-peeker)
-[![docker](https://badgen.net/badge/icon/docker?icon=docker&label=)](https://hub.docker.com/repository/docker/hyperbola/telegram-peeker)
+[![release](https://badgen.net/github/release/wdzeng/telegram-id-pretender/stable?color=red)](https://github.com/wdzeng/telegram-id-pretender/releases/latest)
+[![github](https://badgen.net/badge/icon/github/black?icon=github&label=)](https://github.com/wdzeng/telegram-id-pretender)
+[![docker](https://badgen.net/badge/icon/docker?icon=docker&label=)](https://hub.docker.com/repository/docker/hyperbola/telegram-id-pretender)
 
 ![peek](res/peek.png)
 
@@ -22,15 +22,15 @@ pip3 install telethon
 
 ### Docker
 
-Use the image on [dockerhub](https://hub.docker.com/repository/docker/hyperbola/telegram-peeker).
+Use the image on [dockerhub](https://hub.docker.com/repository/docker/hyperbola/telegram-id-pretender).
 
 ```bash
-docker pull hyperbola/telegram-peeker:v1
+docker pull hyperbola/telegram-id-pretender:v1
 ```
 
 #### Supported tags
 
-- `v1`, `v1.0`
+- `v1`, `v1.1`
 
 ## Usage
 
@@ -46,7 +46,7 @@ TG_API_ID=<api_id> TG_API_HASH=<api_hash> python3 main.py fzhong
 docker run [-it]\
     -e TG_API_ID=<api_id> \
     -e TG_API_HASH=<api_hash> 
-    hyperbola/telegram-peeker:v1 fzhong
+    hyperbola/telegram-id-pretender:v1 fzhong
 ```
 
 The script should ask your login.
@@ -67,7 +67,7 @@ docker run [-it] \
     -v /path/to/session:/session \
     -e TG_API_ID=<api_id> \
     -e TG_API_HASH=<api_hash> \
-    hyperbola/telegram-peeker:v1 -s /session fzhong
+    hyperbola/telegram-id-pretender:v1 -s /session fzhong
 ```
 
 If session file is specified, the script tries to read session token from the file and uses it to login; otherwise if session file does not exist, or if session token is invalid, the script prompts your login and then saves the updated token to session file so that it can perform automatic login in the next run. Keep session file secret since it contains sensitive data.
@@ -107,3 +107,9 @@ Verbosity can be set to either 0, 1, or 2 by `-v` flag. Control which message sh
 - `30`: failed to login
 - `87`: failed for flood
 - `1`: failed for any other reason
+
+## Sister Bots
+
+- [Shopee Coins Bot](https://github.com/wdzeng/shopee-coins-bot/)
+- [Pinkoi Coins Bot](https://github.com/wdzeng/pinkoi-coins-bot/)
+- [PTT Login Bot](https://github.com/wdzeng/ptt-login-bot/)

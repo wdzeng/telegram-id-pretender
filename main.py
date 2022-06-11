@@ -46,7 +46,7 @@ no_prompt = args.no_prompt
 async def info(s, level, client=None):
     print(s)
     if client is not None and verbose >= level:
-        await client.send_message('me', '[Peeker] ' + s)
+        await client.send_message('me', '[Telegram ID Pretender] ' + s)
 
 
 def read_text(path):
