@@ -25,12 +25,12 @@ pip3 install telethon
 Use the image on [dockerhub](https://hub.docker.com/repository/docker/hyperbola/telegram-id-pretender).
 
 ```bash
-docker pull hyperbola/telegram-id-pretender:v1
+docker pull hyperbola/telegram-id-pretender:1
 ```
 
 #### Supported tags
 
-- `v1`, `v1.0`, `v1.0.1`
+- `1`, `1.0`
 
 ## Usage
 
@@ -46,7 +46,7 @@ TG_API_ID=<api_id> TG_API_HASH=<api_hash> python3 main.py fzhong
 docker run [-it]\
     -e TG_API_ID=<api_id> \
     -e TG_API_HASH=<api_hash> 
-    hyperbola/telegram-id-pretender:v1 fzhong
+    hyperbola/telegram-id-pretender:1 fzhong
 ```
 
 The script should ask your login.
@@ -67,7 +67,7 @@ docker run [-it] \
     -v /path/to/session:/session \
     -e TG_API_ID=<api_id> \
     -e TG_API_HASH=<api_hash> \
-    hyperbola/telegram-id-pretender:v1 -s /session fzhong
+    hyperbola/telegram-id-pretender:1 -s /session fzhong
 ```
 
 If session file is specified, the script tries to read session token from the file and uses it to login; otherwise if session file does not exist, or if session token is invalid, the script prompts your login and then saves the updated token to session file so that it can perform automatic login in the next run. Keep session file secret since it contains sensitive data.
