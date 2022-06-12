@@ -30,7 +30,7 @@ docker pull hyperbola/telegram-id-pretender:v1
 
 #### Supported tags
 
-- `v1`, `v1.1`
+- `v1`, `v1.0`, `v1.0.1`
 
 ## Usage
 
